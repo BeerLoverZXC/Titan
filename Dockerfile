@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install curl tar wget clang pkg-config libssl-dev jq build-essential bsdmainutils git make ncdu gcc git jq chrony liblz4-tool -y
+RUN apt-get install time curl tar wget clang pkg-config libssl-dev jq build-essential bsdmainutils git make ncdu gcc git jq chrony liblz4-tool -y
 
 ENV HOME=/app
 
@@ -28,7 +28,7 @@ make install
 
 RUN titand init StakeShark --chain-id titan-test-3
 
-RUN sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025uttnt\"/;" ~/.titan/config/app.toml && \
+RUN sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025uttnt\"/;" $HOME/.titan/config/app.toml && \
 sed -i.bak -e "s/^external_address *=.*/external_address = \"$(wget -qO- eth0.me):26656\"/" $HOME/.titan/config/config.toml && \
 sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.titan/config/config.toml && \
 sed -i.bak -e "s/^seeds =.*/seeds = \"$SEEDS\"/" $HOME/.titan/config/config.toml && \
@@ -40,7 +40,7 @@ sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"10\"/" $HOME/.titan/con
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.titan/config/config.toml && \
 sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.titan/config/config.toml
 
-RUN wget -O $HOME/.titan/config/addrbook.json https://raw.githubusercontent.com/111STAVR111/props/main/Titan/addrbook.json && \
+RUN wget -O $HOME/.titan/config/addrbook.json https://raw.githubusercontent.com/Titannet-dao/titan-chain/main/addrbook/addrbook.json && \
 wget -O $HOME/.titan/config/genesis.json https://raw.githubusercontent.com/Titannet-dao/titan-chain/main/genesis/genesis.json
 
 
