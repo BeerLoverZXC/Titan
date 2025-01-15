@@ -1,0 +1,18 @@
+services:
+  node-titan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: titan-node
+    ports:
+      - "26656:26656"
+      - "26660:26660"
+    restart: unless-stopped
+    volumes:
+      - titan_volume:/app/.titan
+      - ./entrypoint.sh:/app/entrypoint.sh
+      - titan_bin:/app/go
+
+volumes:
+  titan_volume:
+  titan_bin:
