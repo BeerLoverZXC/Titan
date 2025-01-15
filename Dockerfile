@@ -20,6 +20,10 @@ tar -C /usr/local -xzf "go$GO_VER.linux-amd64.tar.gz" && \
 rm "go$GO_VER.linux-amd64.tar.gz" && \
 mkdir -p go/bin
 
+RUN wget -P ~/. https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/libwasmvm.x86_64.so && \
+mv ~/libwasmvm.x86_64.so /usr/local/lib/libwasmvm.x86_64.so && \
+ldconfig
+
 RUN wget -P ~/. https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/titand_0.3.0-1_g167b7fd6.tar.gz && \
 tar -zxvf ~/titand_0.3.0-1_g167b7fd6.tar.gz  --strip-components=1 -C $HOME/go/bin
 
@@ -38,10 +42,7 @@ sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.titan/config/config.t
 sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.titan/config/config.toml
 
 RUN wget -O $HOME/.titan/config/addrbook.json https://raw.githubusercontent.com/Titannet-dao/titan-chain/main/addrbook/addrbook.json && \
-wget -O $HOME/.titan/config/genesis.json https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/genesis.json && \
-wget -P ~/. https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/libwasmvm.x86_64.so && \
-mv ~/libwasmvm.x86_64.so /usr/local/lib/libwasmvm.x86_64.so && \
-ldconfig
+wget -O $HOME/.titan/config/genesis.json https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/genesis.json
 
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'sleep 10000' >> /app/entrypoint.sh && \
