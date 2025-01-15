@@ -13,6 +13,7 @@ ENV GO_VER="1.22.3"
 ENV WALLET="wallet"
 ENV PATH="/usr/local/go/bin:/app/go/bin:${PATH}"
 ENV SEEDS="bb075c8cc4b7032d506008b68d4192298a09aeea@47.76.107.159:26656"
+ENV LD_LIBRARY_PATH=/usr/local/lib/
 
 RUN wget "https://golang.org/dl/go$GO_VER.linux-amd64.tar.gz" && \
 tar -C /usr/local -xzf "go$GO_VER.linux-amd64.tar.gz" && \
