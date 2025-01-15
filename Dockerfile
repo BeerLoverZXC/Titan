@@ -7,7 +7,7 @@ ENV HOME=/app
 
 WORKDIR /app
 
-ENV MONIKER="StakeShark"
+ENV MONIKER="Stake Shark"
 ENV CHAIN_ID="titan-test-3"
 ENV GO_VER="1.22.3"
 ENV WALLET="wallet"
@@ -26,7 +26,7 @@ cd titan-chain && \
 git fetch origin && \
 make install
 
-RUN titand init StakeShark --chain-id titan-test-3
+RUN titand init "Stake Shark" --chain-id titan-test-3
 
 RUN sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025uttnt\"/;" $HOME/.titan/config/app.toml && \
 sed -i.bak -e "s/^external_address *=.*/external_address = \"$(wget -qO- eth0.me):26656\"/" $HOME/.titan/config/config.toml && \
