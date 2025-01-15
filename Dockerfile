@@ -8,25 +8,21 @@ ENV HOME=/app
 WORKDIR /app
 
 ENV MONIKER="Stake Shark"
-ENV CHAIN_ID="titan-test-3"
+ENV CHAIN_ID="titan-test-4"
 ENV GO_VER="1.22.3"
 ENV WALLET="wallet"
 ENV PATH="/usr/local/go/bin:/app/go/bin:${PATH}"
 ENV SEEDS="bb075c8cc4b7032d506008b68d4192298a09aeea@47.76.107.159:26656"
-ENV PEERS="ac90c7d177a2aa738fe80742ea2d7cf0514dbce2@titan.peer.t.stavr.tech:10126"
-
 
 RUN wget "https://golang.org/dl/go$GO_VER.linux-amd64.tar.gz" && \
 tar -C /usr/local -xzf "go$GO_VER.linux-amd64.tar.gz" && \
 rm "go$GO_VER.linux-amd64.tar.gz" && \
 mkdir -p go/bin
 
-RUN git clone https://github.com/Titannet-dao/titan-chain.git && \
-cd titan-chain && \
-git fetch origin && \
-make install
+RUN wget -P ~/. https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/titand_0.3.0-1_g167b7fd6.tar.gz && \
+tar -zxvf ~/titand_0.3.0-1_g167b7fd6.tar.gz  --strip-components=1 -C $HOME/go/bin
 
-RUN titand init "Stake Shark" --chain-id titan-test-3
+RUN titand init "Stake Shark" --chain-id titan-test-4
 
 RUN sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.0025uttnt\"/;" $HOME/.titan/config/app.toml && \
 sed -i.bak -e "s/^external_address *=.*/external_address = \"$(wget -qO- eth0.me):26656\"/" $HOME/.titan/config/config.toml && \
@@ -41,8 +37,10 @@ sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.titan/config/config.t
 sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.titan/config/config.toml
 
 RUN wget -O $HOME/.titan/config/addrbook.json https://raw.githubusercontent.com/Titannet-dao/titan-chain/main/addrbook/addrbook.json && \
-wget -O $HOME/.titan/config/genesis.json https://raw.githubusercontent.com/Titannet-dao/titan-chain/main/genesis/genesis.json
-
+wget -O $HOME/.titan/config/genesis.json https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/genesis.json && \
+wget -P ~/. https://github.com/Titannet-dao/titan-chain/releases/download/v0.3.0/libwasmvm.x86_64.so && \
+mv ~/libwasmvm.x86_64.so /usr/local/lib/libwasmvm.x86_64.so && \
+ldconfig
 
 RUN echo '#!/bin/sh' > /app/entrypoint.sh && \
     echo 'sleep 10000' >> /app/entrypoint.sh && \
